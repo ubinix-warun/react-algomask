@@ -8,11 +8,14 @@ Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algoran
 
 ![UI](https://raw.githubusercontent.com/ubinix-warun/react-algomask/main/doc/images/flow_ui.png)
 
-# Build 
+# Config & Build
+
+* Edit Tatum API Key on src/config.json
+* Run build script with npm
 
 ```
 nvm use v16.10.0
-nvm run build
+npm run build
 ```
 
 # Manual 
