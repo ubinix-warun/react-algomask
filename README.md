@@ -5,6 +5,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ```
 nvm use v16.10.0
 yarn add @types/chrome -D
+yarn add @mui/material @emotion/react @emotion/styled
+
+yarn add @mui/icons-material
 
 ```
 
