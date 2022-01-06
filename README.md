@@ -9,6 +9,7 @@ yarn add @mui/material @emotion/react @emotion/styled
 
 yarn add @mui/icons-material
 
+npm run build
 ```
 
 ## Available Scripts

@@ -29,22 +29,128 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 
 import Button from '@mui/material/Button';
 
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function App() {
-  const [url, setUrl] = useState<string>('');
 
-  /**
-   * Get current URL
-   */
+  const [tatumApikey] = React.useState('');
+
+  const [openSetting, setOpenSetting] = React.useState(false);
+
+  const handleClickOpenSetting = () => {
+
+    setPrivateKey(localStorage.getItem('pk') || '');
+
+    setOpenSetting(true);
+  };
+
+  const handleSettingSave = () => {
+
+    // TODO SAVE to localStorage! and <secure>
+
+    localStorage.setItem('pk', privateKey);
+
+    handleSettingClose();
+  };
+
+  const handleSettingClose = () => {
+    setOpenSetting(false);
+    
+  };
+
+  const [openReceive, setOpenReceive] = React.useState(false);
+
+  const handleClickOpenReceive = () => {
+    setOpenReceive(true);
+  };
+
+  const handleReceiveClose = () => {
+    setOpenReceive(false);
+    
+  };
+
+  const [openSend, setOpenSend] = React.useState(false);
+
+  const handleClickOpenSend = () => {
+
+    setTxSendAddress('');
+    setTxSendAmount(0);
+
+    setOpenSend(true);
+  };
+
+  const handleSendTx = () => {
+    
+    console.log(txFromAddress);
+    console.log(txSendAddress);
+    console.log(txSendAmount);
+
+    handleSendClose()
+  };
+
+  const handleSendClose = () => {
+    setOpenSend(false);
+  };
+
+  const [privateKey, setPrivateKey] = React.useState('');
+
+  const inputPrivateKeyHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const pk = event.target.value;
+    setPrivateKey(pk);
+  };
+
+  const [algoBalance, setAlgoBalance] = React.useState(0);
+
+  const [txFromAddress, setTxFromAddress] = React.useState('M2C7MYGCZBAQJJM5U2MXTZP7L3L3ATVSQFXYLPICS5PSVAX7XQFAWADCNA');
+  const [txSendAddress, setTxSendAddress] = React.useState('');
+
+  const inputSendAddressHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const pk = event.target.value;
+    setTxSendAddress(pk);
+  };
+
+  const [txSendAmount, setTxSendAmount] = React.useState(0);
+
+  const inputTxSendAmountHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const pk = event.target.value;
+    setTxSendAmount(Number(pk));
+  };
+
+  const [txFee, setTxFee] = React.useState(0);
+
+  const inputTxFeeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const pk = event.target.value;
+    setTxFee(Number(pk));
+  };
+
+  const [fromQRAddress, setFromQRAddress] = React.useState('');
+  // const [fromQRAddress, setFromQRAddress] = React.useState({"https://api.qrserver.com/v1/create-qr-code/?data=" + txFromAddress + "&amp;size=195x195"});
+  // const [txFromAddressIsReady, setTxFromAddressIsReady] = React.useState(txFromAddress != '');
+
+
+  // const [url, setUrl] = useState<string>('');
+
   useEffect(() => {
-      const queryInfo = {active: true, lastFocusedWindow: true};
+      // const queryInfo = {active: true, lastFocusedWindow: true};
 
-      chrome.tabs && chrome.tabs.query(queryInfo, tabs => {
-          const url = tabs[0].url || '';
-          setUrl(url);
-      });
+      // chrome.tabs && chrome.tabs.query(queryInfo, tabs => {
+      //     const url = tabs[0].url || '';
+      //     setUrl(url);
+      // });
+
+      console.log(localStorage.getItem('pk'))
+      if(localStorage.getItem('pk') == '') {
+        handleClickOpenSetting();
+        // Require!
+      }
+      
+
   }, []);
-
 
   return (
     <React.Fragment>
@@ -64,7 +170,7 @@ function App() {
               aria-label="show more"
               aria-haspopup="true"
               color="inherit"
-            >
+              onClick={handleClickOpenSetting} >
               <SettingsIcon />
             </IconButton>
           </Box>
@@ -87,10 +193,10 @@ function App() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h4" component="div">
-                  10 Algo
+                  { algoBalance } Algo
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Total value ($) = 5
+                  Total value ($) = ~
                 </Typography>
               </CardContent>
             </CardActionArea>
@@ -99,41 +205,140 @@ function App() {
         <Grid item xs={1}>
           {/* <Item>xs=2</Item> */}
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           {/* <Item>xs=2</Item> */}
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <Button variant="contained" startIcon={<QrCodeScannerIcon />} 
-              style={{maxWidth: '100px', minWidth: '100px', background: '#2E3B55' }}>
+              style={{maxWidth: '120px', minWidth: '120px', background: '#2E3B55' }}
+              onClick={handleClickOpenReceive}>
             Receive
           </Button>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={5}>
           <Button variant="contained" endIcon={<SendIcon />} 
-              style={{maxWidth: '100px', minWidth: '100px', background: '#2E3B55' }}>
+              style={{maxWidth: '120px', minWidth: '120px', background: '#2E3B55' }}
+              onClick={handleClickOpenSend} >
             Send
           </Button>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           {/* <Item>xs=2</Item> */}
         </Grid>
       </Grid>
 
-      <Container>
-        
+      <Dialog open={openSetting} onClose={handleSettingClose}>
+        <DialogTitle>Setup Wallet</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Import private key.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="privatekey"
+            label="Private key"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={privateKey}
+            onChange={inputPrivateKeyHandler}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSettingSave}>Save</Button>
+          <Button onClick={handleSettingClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
 
-        {/* <Box sx={{ my: 2 }}>
-          {[...new Array(1)]
-            .map(
-              () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`,
-            )
-            .join('\n')}
-        </Box> */}
+      <Dialog open={openReceive} onClose={handleReceiveClose}>
+        <DialogTitle>Account</DialogTitle>
+        <DialogContent>
+          {/* <Typography>
+            { txFromAddress }
+          </Typography> */}
 
-      </Container>
+          <Card sx={{ maxWidth: 195 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="195"
+                image={ fromQRAddress }
+                alt="Algorand"
+              />
+              <CardContent>
+                {/* <Typography gutterBottom variant="h4" component="div">
+                  { algoBalance } Algo
+                </Typography> */}
+                <Typography variant="body2" color="text.secondary">
+                  { txFromAddress }
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+
+        </DialogContent>
+        <DialogActions>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openSend} onClose={handleSendClose}>
+        <DialogTitle>Send Algo</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Send your Algo to Address
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="sendFromAddress"
+            label="From"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={txFromAddress}
+            disabled
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="sendToAddress"
+            label="To"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={txSendAddress}
+            onChange={inputSendAddressHandler}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="txSendAmount"
+            label="Amount"
+            type="number"
+            fullWidth
+            variant="standard"
+            value={txSendAmount}
+            onChange={inputTxSendAmountHandler}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="txFee"
+            label="Fee"
+            type="number"
+            fullWidth
+            variant="standard"
+            value={txFee}
+            onChange={inputTxFeeHandler}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSendTx}>Send</Button>
+          <Button onClick={handleSendClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
     </React.Fragment>
 
       // <div className="App">
