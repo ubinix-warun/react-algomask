@@ -36,9 +36,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-function App() {
+import configApi from "./config.json";
 
-  const [tatumApikey] = React.useState('');
+import axios from 'axios';
+
+import LinearProgress from '@mui/material/LinearProgress';
+
+function App() {
 
   const [openSetting, setOpenSetting] = React.useState(false);
 
@@ -55,6 +59,9 @@ function App() {
 
     localStorage.setItem('pk', privateKey);
 
+    setAlgoBalance(0);
+    getWalletInfor();
+
     handleSettingClose();
   };
 
@@ -62,6 +69,7 @@ function App() {
     setOpenSetting(false);
     
   };
+  const [openProgress, setOpenProgress] = React.useState(false);
 
   const [openReceive, setOpenReceive] = React.useState(false);
 
@@ -135,6 +143,28 @@ function App() {
 
   // const [url, setUrl] = useState<string>('');
 
+  const getWalletInfor = () => {
+    setOpenProgress(true);
+    axios.get(
+      configApi.TATUM_API_URL+`/v3/algorand/address/`+localStorage.getItem('pk'),
+      { headers: { 'x-api-key': configApi.TATUM_API_KEY }} )
+    .then(res => {
+      const addr = res.data;
+      setTxFromAddress(addr);
+      setFromQRAddress(`https://api.qrserver.com/v1/create-qr-code/?data=` + addr + `&amp;size=195x195`)
+
+      axios.get(
+        configApi.TATUM_API_URL+`/v3/algorand/account/balance/`+addr,
+        { headers: { 'x-api-key': configApi.TATUM_API_KEY }} )
+      .then(res => {
+        const balance = res.data;
+        setAlgoBalance(balance);
+        setOpenProgress(false);
+      })
+
+    })
+  };
+
   useEffect(() => {
       // const queryInfo = {active: true, lastFocusedWindow: true};
 
@@ -143,12 +173,19 @@ function App() {
       //     setUrl(url);
       // });
 
-      console.log(localStorage.getItem('pk'))
       if(localStorage.getItem('pk') == '') {
         handleClickOpenSetting();
         // Require!
+        
+      } else {
+
+        getWalletInfor();
+        
       }
-      
+
+      // console.log(configApi.TATUM_API_KEY);
+      // console.log(configApi.TATUM_API_URL);
+    
 
   }, []);
 
@@ -175,6 +212,7 @@ function App() {
             </IconButton>
           </Box>
         </Toolbar>
+          {openProgress ? <LinearProgress color="inherit" /> : null}
       </AppBar>
 
       <Toolbar />
@@ -193,7 +231,7 @@ function App() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h4" component="div">
-                  { algoBalance } Algo
+                { algoBalance } Algo
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Total value ($) = ~
