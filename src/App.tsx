@@ -41,6 +41,7 @@ import configApi from "./config.json";
 import axios from 'axios';
 
 import LinearProgress from '@mui/material/LinearProgress';
+import Link from '@mui/material/Link';
 
 function App() {
 
@@ -92,11 +93,60 @@ function App() {
     setOpenSend(true);
   };
 
+  const [urlLastTxSuccess, setUrlLastTxSuccess] = React.useState('');
+  const [lastTxSuccess, setLastTxSuccess] = React.useState('');
+
   const handleSendTx = () => {
     
-    console.log(txFromAddress);
-    console.log(txSendAddress);
-    console.log(txSendAmount);
+    // console.log(txFromAddress);
+    // console.log(txSendAddress);
+    // console.log(txSendAmount);
+
+    // {
+    //   "from": "QOY7F6G6LVLMB4PZ74S5GZMSI5ST44FRZTEUTS3KDTUA27ADV25YF3WTBA",
+    //   "to": "V56ESV4XVJPG723RORQDTOORMNRXJYSDL7LBYKZCFBGRCYID32Y66HZIAI",
+    //   "fee": "0.01",
+    //   "amount": "3.23",
+    //   "fromPrivateKey": ".."
+    // }
+
+    const req = { 
+      from: txFromAddress,
+      to: txSendAddress,
+      fee: txFee.toString(),
+      amount: txSendAmount.toString(),
+      fromPrivateKey: localStorage.getItem('pk'),
+    };
+
+    // console.log(req);
+    setOpenProgress(true);
+
+    axios.post(
+      configApi.TATUM_API_URL+`/v3/algorand/transaction`,
+      req,
+      { headers: { 'x-api-key': configApi.TATUM_API_KEY }}
+    )
+      .then(res => {
+        console.log(res.data);
+
+        // DONE!
+        // setLastTxSuccess(res.data);
+        // setUrlLastTxSuccess(`https://testnet.algoexplorer.io/tx/`+res.data);
+
+        setOpenProgress(false);
+        setTxSuccess(true);
+
+        getWalletInfor();
+
+
+      }).catch(error => {
+
+        console.log(error)
+        
+        setOpenProgress(false);
+        setTxError(true);
+
+      });
 
     handleSendClose()
   };
@@ -104,6 +154,23 @@ function App() {
   const handleSendClose = () => {
     setOpenSend(false);
   };
+
+  const [txSuccess, setTxSuccess] = React.useState(false);
+
+  const handleTxSuccessClose = () => {
+
+    setTxSuccess(false);
+
+  };
+
+  const [txError, setTxError] = React.useState(false);
+
+  const handleTxErrorClose = () => {
+
+    setTxError(false);
+
+  };
+
 
   const [privateKey, setPrivateKey] = React.useState('');
 
@@ -114,7 +181,7 @@ function App() {
 
   const [algoBalance, setAlgoBalance] = React.useState(0);
 
-  const [txFromAddress, setTxFromAddress] = React.useState('M2C7MYGCZBAQJJM5U2MXTZP7L3L3ATVSQFXYLPICS5PSVAX7XQFAWADCNA');
+  const [txFromAddress, setTxFromAddress] = React.useState('');
   const [txSendAddress, setTxSendAddress] = React.useState('');
 
   const inputSendAddressHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,9 +204,6 @@ function App() {
   };
 
   const [fromQRAddress, setFromQRAddress] = React.useState('');
-  // const [fromQRAddress, setFromQRAddress] = React.useState({"https://api.qrserver.com/v1/create-qr-code/?data=" + txFromAddress + "&amp;size=195x195"});
-  // const [txFromAddressIsReady, setTxFromAddressIsReady] = React.useState(txFromAddress != '');
-
 
   // const [url, setUrl] = useState<string>('');
 
@@ -286,6 +350,52 @@ function App() {
         <DialogActions>
           <Button onClick={handleSettingSave}>Save</Button>
           <Button onClick={handleSettingClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={txSuccess} onClose={handleTxSuccessClose}>
+        <DialogTitle>Tx Success</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+          <Card sx={{ maxWidth: 195 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="195"
+                image="green-check.png"
+                alt="Algorand"
+              />
+              <CardContent>
+              <Link href={urlLastTxSuccess}>{lastTxSuccess}</Link>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={txError} onClose={handleTxErrorClose}>
+        <DialogTitle>Tx Error</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+          <Card sx={{ maxWidth: 195 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="195"
+                image="red-error.png"
+                alt="Algorand"
+              />
+              <CardContent>
+
+              </CardContent>
+            </CardActionArea>
+          </Card>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
         </DialogActions>
       </Dialog>
 
