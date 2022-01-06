@@ -20,7 +20,9 @@ nvm run build
 * Goto chrome://extensions/ > Enable developer mode
 * Use Load unpacked to %PROJECT%/build
 
-# Ref
+# Credit
 
 * use [Tatum API](https://tatum.io/apidoc.php#tag/Blockchain-Algorand-(ALGO))
+* use mui for opensource https://mui.com/
 * This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+* generate qr with https://api.qrserver.com 
