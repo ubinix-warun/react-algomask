@@ -21,7 +21,7 @@ npm run build
 # Manual 
 
 * Goto chrome://extensions/ > Enable developer mode
-* Use Load unpacked to %PROJECT%/build
+* Load unpacked from %PROJECT%/build
 
 # Credit
 
