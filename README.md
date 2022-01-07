@@ -1,7 +1,9 @@
 # React Algomask with Tatum!
 
-Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algorandfoundation/grow-algorand/122/100027180)
+Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algorandfoundation/grow-algorand/122/100027180) [MIT LICENSE](https://github.com/ubinix-warun/react-algomask/blob/master/LICENSE)
 
+**the project is not audited and should not be used in a production environment.
+ 
 ![Project](https://raw.githubusercontent.com/ubinix-warun/react-algomask/main/doc/images/landing_ext.png)
 
 # Screenshots
@@ -10,7 +12,7 @@ Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algoran
 
 # Config & Build
 
-* Edit Tatum API Key on src/config.json
+* Edit Tatum API key on src/config.json
 * Run build script with npm
 
 ```
@@ -25,7 +27,7 @@ npm run build
 
 # Credit
 
-* use [Tatum API](https://tatum.io/apidoc.php#tag/Blockchain-Algorand-(ALGO))
-* use mui for opensource https://mui.com/
+* Use [Tatum API](https://tatum.io/apidoc.php#tag/Blockchain-Algorand-(ALGO))
+* Use MUI for opensource https://mui.com/
+* Generate qr with https://api.qrserver.com 
 * This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-* generate qr with https://api.qrserver.com 

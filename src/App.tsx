@@ -237,7 +237,9 @@ function App() {
       //     setUrl(url);
       // });
 
-      if(localStorage.getItem('pk') == '') {
+      if(localStorage.getItem('pk') == '' || 
+          localStorage.getItem('pk') == null) {
+            
         handleClickOpenSetting();
         // Require!
         
