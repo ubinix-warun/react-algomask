@@ -1,6 +1,6 @@
 # React Algomask with Tatum!
 
-Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algorandfoundation/grow-algorand/122/100027180) [MIT LICENSE](https://github.com/ubinix-warun/react-algomask/blob/master/LICENSE)
+Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algorandfoundation/grow-algorand/122/100027180), [MIT LICENSE](https://github.com/ubinix-warun/react-algomask/blob/master/LICENSE)
 
 **the project is not audited and should not be used in a production environment.
  
