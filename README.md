@@ -10,6 +10,8 @@ Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algoran
 
 ![UI](https://raw.githubusercontent.com/ubinix-warun/react-algomask/main/doc/images/flow_ui.png)
 
+[Demo](https://www.youtube.com/watch?v=urilzrmp5b0)
+
 # Config & Build
 
 * Edit Tatum API key on src/config.json
