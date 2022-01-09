@@ -10,15 +10,22 @@ Algomask <> Metamask -- [Algo wallet on Chrome](https://gitcoin.co/issue/algoran
 
 ![UI](https://raw.githubusercontent.com/ubinix-warun/react-algomask/main/doc/images/flow_ui.png)
 
-### [Demo](https://www.youtube.com/watch?v=urilzrmp5b0)
+### [Setup & Demo](https://www.youtube.com/watch?v=urilzrmp5b0)
 
 # Config & Build
 
 * Edit Tatum API key on src/config.json
+```
+{
+    "TATUM_API_KEY": "<TATUM_API_KEY>",
+    "TATUM_API_URL": "https://api-eu1.tatum.io"
+}
+```
 * Run build script with npm
-
 ```
 nvm use v16.10.0
+npm run install
+
 npm run build
 ```
 
@@ -29,7 +36,7 @@ npm run build
 
 # Credit
 
-* Use [Tatum API](https://tatum.io/apidoc.php#tag/Blockchain-Algorand-(ALGO))
+* Use [Tatum API](https://tatum.io/apidoc.php#tag/Blockchain-Algorand-(ALGO)) for Blockchain platform.
 * Use MUI for opensource https://mui.com/
 * Generate qr with https://api.qrserver.com 
 * This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
